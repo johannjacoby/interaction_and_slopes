@@ -30,7 +30,7 @@ summary(model0); summary(model.lo); summary(model.hi)
 # print the interaction and the simple slopes of X1 @ X2=-1SD and X2=+1SD
 results0 <- summary(model0)[[4]]; results.lo <- summary(model.lo)[[4]]; results.hi <- summary(model0)[[4]]
 cat("\n",
-	"interaction: b=",results0[4],", t=",results0[12],", p=",sprintf("%5.4f",results0[16]),ifelse(results0[16] < .05," *",""),"\n",
-	"slope low: b=",results.lo[2],", t=",results.lo[10],", p=",sprintf("%5.4f",results.lo[14]),ifelse(results.lo[14] < .05," *",""),"\n",
-	"slope high: b=",results.hi[2],", t=",results.hi[10],", p=",sprintf("%5.4f",results.hi[14]),ifelse(results.hi[14] < .05," *",""),"\n",
+	"Interaction X1 * X2: b=",results0[4],", t=",results0[12],", p=",sprintf("%5.4f",results0[16]),ifelse(results0[16] < .05," *",""),"\n",
+	"Slope of X1 @ X2 = -1SD: b=",results.lo[2],", t=",results.lo[10],", p=",sprintf("%5.4f",results.lo[14]),ifelse(results.lo[14] < .05," *",""),"\n",
+	"Slope of X1 @ X2 = +1SD: b=",results.hi[2],", t=",results.hi[10],", p=",sprintf("%5.4f",results.hi[14]),ifelse(results.hi[14] < .05," *",""),"\n",
 	sep="")
