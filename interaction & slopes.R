@@ -1,4 +1,4 @@
-ds <- as.data.frame(read.table("https://docs.google.com/uc?export=download&id=0B3pWnSnm2FOpeV9laDFMeU9RUW8"))
+ds <- as.data.frame(read.table("https://github.com/johannjacoby/interaction_and_slopes/blob/master/no_interaction_differing_slopes.dat"))
 
 ds$centered.X1 <- scale(ds$X1, center=T, scale=F)
 ds$centered.X2 <- scale(ds$X2, center=T, scale=F)
