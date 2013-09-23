@@ -9,9 +9,9 @@ ds$centered.X1 <- scale(ds$X1, center=T, scale=F)
 ds$centered.X2 <- scale(ds$X2, center=T, scale=F)
 
 #shift X2 to obtain the simple slope of X1 @ 1SD below the mean of X2
-ds$centered.X2.lo <- ds$X2 + sd(ds$X2)
+ds$centered.X2.lo <- ds$centered.X2 + sd(ds$X2)
 #shift X2 to obtain the simple slope of X1 @ 1SD above the mean of X2
-ds$centered.X2.hi <- ds$X2 - sd(ds$X2)
+ds$centered.X2.hi <- ds$centered.X2 - sd(ds$X2)
 
 #### yes, it is correct, to get ds$centered.X2.hi you have to <b>subtract</b> 1 SD, 
 #### and in order to get ds$centered.X2.lo you have to <b>add</b> 1 SD.
@@ -34,3 +34,9 @@ cat("\n",
 	"Slope of X1 @ X2 = -1SD: b=",results.lo[2],", t=",results.lo[10],", p=",sprintf("%5.4f",results.lo[14]),ifelse(results.lo[14] < .05," *",""),"\n",
 	"Slope of X1 @ X2 = +1SD: b=",results.hi[2],", t=",results.hi[10],", p=",sprintf("%5.4f",results.hi[14]),ifelse(results.hi[14] < .05," *",""),"\n",
 	sep="")
+
+# simple slope of X1 @ X2 = mean
+cat("Slope of X1 @ X2 = mean of X2: b=",results0[2],", t=",results0[10],", p=",sprintf("%5.4f",results0[14]),ifelse(results0[14] < .05," *",""),"\n")
+
+
+
