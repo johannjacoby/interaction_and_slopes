@@ -89,7 +89,7 @@ dg <- barplot2(
 title(sub=expression(paste("Error bars denote 95% confidence intervals | * = significant at ", alpha, " < .05", sep="")), cex.sub=.7, adj=0)
 text(dg[1],test1$conf.int[2]+.5,paste("M = ",sprintf("%3.2f", test1$estimate), "  ", ifelse(test1$p.value < .05,"*","n.s."), sep=""))
 text(dg[2],test2$conf.int[2]+.5,paste("M = ",sprintf("%3.2f", test2$estimate), "  ", ifelse(test2$p.value < .05,"*","n.s."), sep=""))
-png("huhu.png"); dev.off()
+
 #comparing the difference between means against 0
 test.both <- t.test(exampledata.group.means$dv, exampledata.group.means$group)
 cat(
