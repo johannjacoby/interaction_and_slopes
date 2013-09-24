@@ -64,28 +64,34 @@ cat(
 	sep="")
 
 
+exampledata.group.means <- as.data.frame(
+	read.table(
+		"https://raw.github.com/johannjacoby/interaction_and_slopes/master/group.mean.comparison.dat", header=T, sep="\t", quote="", stringsAsFactors=F))
 
-exampledata.group.means <- as.data.frame(cbind(dv=c(trunc(rnorm(47,2,4)), trunc(rnorm(42,2.4,4))), group=c(rep(1,47), rep(2, 42))))
-table( exampledata.group.means$dv	)
-#comparing group means against 0
+
+#comparing group means individually against 0
 test1 <- t.test(exampledata.group.means[which(exampledata.group.means$group==1),]$dv)
 test2 <- t.test(exampledata.group.means[which(exampledata.group.means$group==2),]$dv)
 cat(
-	"Group 1: t = ",test1$statistic,", p = ", sprintf("%20.10f",test1$p.value),"\n",
-	"Group 2: t = ",test2$statistic,", p = ", sprintf("%20.10f",test2$p.value),"\n",
+	"Group 1: t = ",test1$statistic,", p = ", sprintf("%10.9f",test1$p.value),"\n",
+	"Group 2: t = ",test2$statistic,", p = ", sprintf("%10.9f",test2$p.value),"\n",
 	sep="")
 
 library(gplots)
 
-barplot2(
+dg <- barplot2(
 	tapply(exampledata.group.means$dv, exampledata.group.means$group, mean),
-	ylim = c(-1,5),
-	names.arg = c("Group 1", "Group 2"),
-	plot.ci=TRUE, ci.l=c(test1$conf.int[1], test2$conf.int[1]), ci.u=c(test1$conf.int[2], test2$conf.int[2])
+	width=c(1,1),	names.arg = c("Group 1", "Group 2"),
+	xlim=c(0,3), ylim = c(min(c(test1$conf.int[1], test2$conf.int[1]))-1,max(c(test1$conf.int[2], test2$conf.int[2]))+1),
+	plot.ci=TRUE, ci.l=c(test1$conf.int[1], test2$conf.int[1]), ci.u=c(test1$conf.int[2], test2$conf.int[2]),
+	ci.width=.1
 )
-
+title(sub=expression(paste("Error bars denote 95% confidence intervals | * = significant at ", alpha, " < .05", sep="")), cex.sub=.7, adj=0)
+text(dg[1],test1$conf.int[2]+.5,paste("M = ",sprintf("%3.2f", test1$estimate), "  ", ifelse(test1$p.value < .05,"*","n.s."), sep=""))
+text(dg[2],test2$conf.int[2]+.5,paste("M = ",sprintf("%3.2f", test2$estimate), "  ", ifelse(test2$p.value < .05,"*","n.s."), sep=""))
+png("huhu.png"); dev.off()
 #comparing the difference between means against 0
 test.both <- t.test(exampledata.group.means$dv, exampledata.group.means$group)
 cat(
-	"Group comparison : t = ",test.both$statistic,", p ", ifelse(sprintf("%5.4f",test.both$p.value) < .0001, "< .0001", paste(" = ", sprintf("%5.4f",test.both$p.value), sep="")),"\n",
+	"Group comparison [M(Group 1) - M(Group2) against zero]: t = ",test.both$statistic,", p = ", sprintf("%5.4f",test.both$p.value),"\n",
 	sep="")
