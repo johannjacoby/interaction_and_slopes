@@ -95,3 +95,30 @@ test.both <- t.test(exampledata.group.means$dv, exampledata.group.means$group)
 cat(
 	"Group comparison [M(Group 1) - M(Group2) against zero]: t = ",test.both$statistic,", p = ", sprintf("%5.4f",test.both$p.value),"\n",
 	sep="")
+
+
+
+# data example: interaction significant but the simple slopes are not
+example2 <- as.data.frame(
+	read.table(
+		"https://raw.github.com/johannjacoby/interaction_and_slopes/master/interaction_insignificant_slopes.dat", 
+		header=T, sep="\t"))
+
+example2$centered.X1 <- scale(example2$X1, center=T, scale=F)
+example2$centered.X2 <- scale(example2$X2, center=T, scale=F)
+example2$centered.X2.lo <- example2$centered.X2 + sd(example2$X2)
+example2$centered.X2.hi <- example2$centered.X2 - sd(example2$X2)
+model0.2 <- lm(Y~centered.X1*centered.X2, example2)
+model.lo.2 <- lm(Y~centered.X1*centered.X2.lo, example2)
+model.hi.2 <- lm(Y~centered.X1*centered.X2.hi, example2)
+results0.2 <- summary(model0.2)[[4]]; results.lo.2 <- summary(model.lo.2)[[4]]; results.hi.2 <- summary(model.hi.2)[[4]]
+cat("\n",
+		"Interaction X1 * X2: b=",results0.2[4],", t=",results0.2[12],", p=",
+		sprintf("%5.4f",results0[16]),ifelse(results0.2[16] < .05," *",""),"\n",
+		"Slope of X1 @ X2 = -1SD: b=",results.lo.2[2],", t=",results.lo.2[10],", p=",
+		sprintf("%5.4f",results.lo.2[14]),ifelse(results.lo.2[14] < .05," *",""),"\n",
+		"Slope of X1 @ X2 = +1SD: b=",results.hi.2[2],", t=",results.hi.2[10],", p=",
+		sprintf("%5.4f",results.hi.2[14]),ifelse(results.hi.2[14] < .05," *",""),"\n",
+		"absolute diff(p) = |",results.hi.2[14]," - ",results.lo.2[14],"| = ", abs(results.hi.2[14] - results.lo.2[14]),	"\n",
+		"diff(b) = ",results.hi.2[2]," - ",results.lo.2[2]," = ",results.hi.2[2] - results.lo.2[2],	"\n",	
+		sep="")
