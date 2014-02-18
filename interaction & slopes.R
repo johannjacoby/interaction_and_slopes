@@ -28,7 +28,10 @@ model.hi <- lm(Y~centered.X1*centered.X2.hi, ds)
 summary(model0); summary(model.lo); summary(model.hi)
 
 # print the interaction and the simple slopes of X1 @ X2=-1SD and X2=+1SD
-results0 <- summary(model0)[[4]]; results.lo <- summary(model.lo)[[4]]; results.hi <- summary(model0)[[4]]
+results0 <- summary(model0)[[4]]
+results.lo <- summary(model.lo)[[4]]
+results.hi <- summary(model.hi)[[4]]
+
 cat("\n",
 	"Interaction X1 * X2: b=",results0[4],", t=",results0[12],", p=",
 					sprintf("%5.4f",results0[16]),ifelse(results0[16] < .05," *",""),"\n",
@@ -46,18 +49,16 @@ cat("Slope of X1 @ X2 = mean of X2: b=",results0[2],", t=",results0[10],", p=",s
 
 
 # simple slopes of X1 @ X2 = -2.5 SD and @ X1 = -0.5SD
-ds$centered.X2.lo.other <- ds$centered.X2 + 2.5*sd(ds$X2)
-ds$centered.X2.hi.other <- ds$centered.X2 + 1.5*sd(ds$X2)
+ds$centered.X2.lo.other <- ds$centered.X2 + 2 *sd(ds$X2)
 model.lo.other <- lm(Y~centered.X1*centered.X2.lo.other, ds)
-model.hi.other <- lm(Y~centered.X1*centered.X2.hi.other, ds)
 
-summary(model.lo.other); summary(model.hi.other)
+summary(model.lo.other)
 
 results.lo.other <- summary(model.lo.other)[[4]]; results.hi.other = summary(model.hi.other)[[4]]
 cat(
-	"Slope of X1 @ X2 = -2.5SD: b=",results.lo.other[2],", t=",results.lo.other[10],", p=",
+	"Slope of X1 @ X2 = -2SD: b=",results.lo.other[2],", t=",results.lo.other[10],", p=",
 					sprintf("%5.4f",results.lo.other[14]),ifelse(results.lo.other[14] < .05," *",""),"\n",
-	"Slope of X1 @ X2 = -1.55SD: b=",results.hi.other[2],", t=",results.hi.other[10],", p=",
+	"Slope of X1 @ X2 = mean of X2: b=",results.hi.other[2],", t=",results.hi.other[10],", p=",
 					sprintf("%5.4f",results.hi.other[14]),ifelse(results.hi.other[14] < .05," *",""),"\n",
 	"abs.diff(p) = |",results.hi.other[14]," - ",results.lo.other[14],"| = ",abs(results.hi.other[14] - results.lo.other[14]),	"\n",
 	"diff(b) = ",results.hi.other[2]," - ",results.lo.other[2]," = ",results.hi.other[2] - results.lo.other[2],	"\n",	
